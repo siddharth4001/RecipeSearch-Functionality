@@ -1,6 +1,14 @@
-body{
+body {
     text-align: center;
+    background-color: #45a049;
 }
+
+.search-input{
+    width: 40%;
+    height:30px;
+}
+
+
 .loading-indicator {
     display: none;
     text-align: center;
@@ -8,7 +16,9 @@ body{
 }
 
 .card {
-    width: calc(33% - 20px); /* Adjust based on your styling */
+    width: calc(33% - 20px);
+    /* Adjust based on your styling */
+    background-color: #03c8a8;
     margin: 10px;
     padding: 10px;
     border: 1px solid #ccc;
@@ -164,47 +174,65 @@ button {
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s ease;
-  }
+}
 
-  .filter-btn:hover {
+.filter-btn:hover {
     background-color: #45a049;
-  }
+}
 
-  /* The overlay (background) */
-  .overlay {
-    display: none; /* Hidden by default */
-    position: fixed; /* Stay in place */
-    z-index: 1000; /* Sit on top */
+/* The overlay (background) */
+.overlay {
+    display: none;
+    /* Hidden by default */
+    position: fixed;
+    /* Stay in place */
+    z-index: 1000;
+    /* Sit on top */
     left: 0;
     top: 0;
-    width: 100%; /* Full width */
-    height: 100%; /* Full height */
-    background-color: rgba(0,0,0,0.5); /* Black w/ opacity */
-    overflow-x: hidden; /* Disable horizontal scroll */
-    transition: 0.5s; /* 0.5 second transition effect to fade in and out */
-    padding-top: 60px; /* Center vertically */
-  }
+    width: 100%;
+    /* Full width */
+    height: 100%;
+    /* Full height */
+    background-color: rgba(0, 0, 0, 0.5);
+    /* Black w/ opacity */
+    overflow-x: hidden;
+    /* Disable horizontal scroll */
+    transition: 0.5s;
+    /* 0.5 second transition effect to fade in and out */
+    padding-top: 60px;
+    /* Center vertically */
+}
 
-  /* The overlay content */
-  .overlay-content {
+/* The overlay content */
+.overlay-content {
     position: relative;
     background-color: #fefefe;
     margin: auto;
     padding: 20px;
     border-radius: 10px;
-    width: 80%; /* 80% width */
-    max-width: 400px; /* Max width of 400px */
-    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+    width: 80%;
+    /* 80% width */
+    max-width: 400px;
+    /* Max width of 400px */
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     animation: slideIn 0.5s ease;
-  }
+}
 
-  /* Animation for overlay content */
-  @keyframes slideIn {
-    from {top: -100px; opacity: 0}
-    to {top: 0; opacity: 1}
-  }
+/* Animation for overlay content */
+@keyframes slideIn {
+    from {
+        top: -100px;
+        opacity: 0
+    }
 
-  .close-btn {
+    to {
+        top: 0;
+        opacity: 1
+    }
+}
+
+.close-btn {
     position: absolute;
     top: 10px;
     right: 10px;
@@ -212,31 +240,79 @@ button {
     font-size: 28px;
     font-weight: bold;
     cursor: pointer;
-  }
+}
 
-  .close-btn:hover,
-  .close-btn:focus {
+.close-btn:hover,
+.close-btn:focus {
     color: black;
     text-decoration: none;
     cursor: pointer;
-  }
+}
 
-  .filter-options {
+.filter-options {
     margin-top: 20px;
-    display: flex; /* Display options in a row */
-    flex-wrap: wrap; /* Wrap options to next line if needed */
-    justify-content: center; /* Center items horizontally */
-  }
+    display: flex;
+    /* Display options in a row */
+    flex-wrap: wrap;
+    /* Wrap options to next line if needed */
+    justify-content: center;
+    /* Center items horizontally */
+}
 
-  .filter-option {
+.filter-option {
     padding: 10px;
     margin: 5px;
     background-color: #f0f0f0;
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s ease;
-  }
+}
 
-  .filter-option:hover {
+.filter-option:hover {
     background-color: #e0e0e0;
-  }
+}
+
+/* navbar */
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #333;
+    color: #fff;
+    padding: 10px 20px;
+    font: 1em sans-serif;
+}
+
+/* Style the links on the left side of the navbar */
+.navbar-left a {
+    color: #fff;
+    text-decoration: none;
+    margin-right: 20px;
+}
+
+/* Style the user's name on the right side of the navbar */
+.navbar-right {
+    font-size: 16px;
+}
+
+/* Change background color of links on hover */
+.navbar a:hover {
+    background-color: #829089;
+    color: black;
+    border: 20px;
+    border-radius: 3px;
+    border-color: #f0f0f0;
+}
+
+/* logout button */
+logout-button {
+    background-color: transparent;
+    border: none;
+    color: inherit;
+    font: inherit;
+    cursor: pointer;
+    padding: 0;
+    margin: 0;
+    outline: none;
+}

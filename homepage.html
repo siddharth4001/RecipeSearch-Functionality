@@ -9,12 +9,29 @@
 </head>
 
 <body>
+    <div class="navbar">
+        <div class="navbar-left">
+            <a href="homepage.html">Zomatos</a>
+            <a href="homepage.html">Home</a>
+            <a href="404.html">Favourites</a>
+            <a href="login.html">Login</a>
+            <a href="index.html">Signup</a>
+        </div>
+        <div class="navbar-right">
+            <div class="welcome" id="welcome"></div>
+        </div>
+    </div>
 
-    <div class="welcome" id="welcome"></div>
+
     <div class="SearchBar">
-        <input type="text" name="" id="search" placeholder="ex.Garlic Naan, Biriyani">
-        <button type="button" onclick="handleSubmit()">Search</button>
-        <button onclick="logout()">Logout</button>
+        <input type="text" class="search-input" id="search" placeholder="ex.Garlic Naan, Biriyani">
+        <button class="search" onclick="handleSubmit()">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search"
+                viewBox="0 0 16 16">
+                <path
+                    d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
+            </svg>
+        </button>
 
         <button class="filter-btn" id="filterBtn">Filter</button>
 
@@ -64,8 +81,22 @@
 
     <script>
 
-        document.getElementById("welcome").innerHTML = 
-        `welcome ${localStorage.getItem("username")}`;
+        document.getElementById("welcome").innerHTML =
+            `${localStorage.getItem("username")} <button class="logout-button" onclick="logout()"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
+  <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
+  <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"/>
+</svg></button>`;
+
+
+
+// <button class="filter-btn" id="filterBtn">Filter</button>
+
+// <div id="overlay" class="overlay">
+//     <div class="overlay-content">
+//         <span class="close-btn" id="closeBtn">&times;</span>
+// </div>
+
+
 
         var log = localStorage.getItem("isLoggedIn");
         if (log == 0) {
@@ -75,6 +106,30 @@
         let currentPage = 1;
         let searchPerformed = false;
 
+        async function getRandomRecipes() {
+            try {
+                const resp = await fetch(`https://api.spoonacular.com/recipes/random?apiKey=9bca20bd730c497eba8ec4f3428d3ac7&number=${RESULTS_PER_PAGE}`);
+                const data = await resp.json();
+                const dataContainer = document.getElementById('data-container');
+                dataContainer.innerHTML = data.recipes.map(item => `
+                    <div class="card">
+                        <img src="${item.image}" alt="${item.title}">
+                        <b><p>${item.title}</p></b>
+                        <div class="frame">
+                            <button class="custom-btn btn-4" onclick="viewRecipe('${item.id}')"><span>View Recipe</span></button>
+                        </div>
+                    </div>
+                    `).join('');
+
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            getRandomRecipes();
+        });
+
         async function handleSubmit(e) {
             var query = document.getElementById("search").value;
             const cuisineOptions = Array.from(document.querySelectorAll('.cuisine-option:checked')).map(option => option.value).join(',');
@@ -82,17 +137,17 @@
             const intolerances = Array.from(document.querySelectorAll('.intolerance-option:checked')).map(option => option.value).join(',');
             try {
                 document.getElementById("loading-indicator").style.display = "block";
-                let apiUrl = `https://api.spoonacular.com/recipes/complexSearch?apiKey=4b5597be793a4bb9bdb020314810e89c&query=${query}`;
-                if(cuisineOptions.length){
-                    apiUrl+=`&cuisine=${cuisineOptions}`;
+                let apiUrl = `https://api.spoonacular.com/recipes/complexSearch?apiKey=9bca20bd730c497eba8ec4f3428d3ac7&query=${query}`;
+                if (cuisineOptions.length) {
+                    apiUrl += `&cuisine=${cuisineOptions}`;
                 }
-                if(dietaryPreferences.length){
-                    apiUrl+=`&diets=${dietaryPreferences}`;
+                if (dietaryPreferences.length) {
+                    apiUrl += `&diets=${dietaryPreferences}`;
                 }
-                if(intolerances.length){
-                    apiUrl+=`&intolerances=${intolerances}`;
+                if (intolerances.length) {
+                    apiUrl += `&intolerances=${intolerances}`;
                 }
-                apiUrl+=`&number=${RESULTS_PER_PAGE}&offset=${(currentPage - 1) * RESULTS_PER_PAGE}`;
+                apiUrl += `&number=${RESULTS_PER_PAGE}&offset=${(currentPage - 1) * RESULTS_PER_PAGE}`;
                 console.log(apiUrl);
 
                 const resp = await fetch(apiUrl);
@@ -100,7 +155,7 @@
                 console.log(data);
                 const dataContainer = document.getElementById('data-container');
                 if (data.results.length === 0) {
-                    // window.location.href = "404.html";
+                    window.location.href = "404.html";
                 } else {
                     dataContainer.innerHTML = data.results.map(item => `
                     <div class="card">
@@ -131,7 +186,7 @@
         async function viewRecipe(recipeId) {
             try {
                 document.getElementById("loading-indicator").style.display = "block";
-                const resp = await fetch(`https://api.spoonacular.com/recipes/${recipeId}/information?apiKey=4b5597be793a4bb9bdb020314810e89c`);
+                const resp = await fetch(`https://api.spoonacular.com/recipes/${recipeId}/information?apiKey=9bca20bd730c497eba8ec4f3428d3ac7`);
                 const recipeData = await resp.json();
                 window.location.href = `recipe.html?id=${recipeId}`;
             } catch (err) {
@@ -159,24 +214,6 @@
             window.location.href = "index.html";
         }
 
-        // async function jokes() {
-        //     try {
-        //         const resp = await fetch(`https://api.spoonacular.com/food/jokes/random?apiKey=4b5597be793a4bb9bdb020314810e89c`);
-        //         const joke = await resp.json();
-        //         console.log(joke);
-        //         document.getElementById("recipe").innerHTML = `
-        //         <p>${joke.text}</p>
-        //     `;
-        //     } catch (err) {
-        //         console.error(err);
-        //     }
-        // }
-
-
-        // document.addEventListener("DOMContentLoaded", function () {
-        //     getRandomRecipes(); // Display random recipes initially
-        // });
-
         var filterBtn = document.getElementById("filterBtn");
         var overlay = document.getElementById("overlay");
 
@@ -203,4 +240,5 @@
     </script>
 
 </body>
-</html> 
+
+</html>

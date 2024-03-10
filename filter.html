@@ -1,168 +1,53 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Recipe Filter</title>
-<style>
-  body {
-    font-family: Arial, sans-serif;
-    background-color: #f5f5f5;
-    margin: 0;
-    padding: 0;
-  }
-
-  .filter-btn {
-    background-color: #4CAF50;
-    color: white;
-    padding: 10px 20px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    margin-top: 20px;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-
-  .filter-btn:hover {
-    background-color: #45a049;
-  }
-
-  /* The overlay (background) */
-  .overlay {
-    display: none; /* Hidden by default */
-    position: fixed; /* Stay in place */
-    z-index: 1000; /* Sit on top */
-    left: 0;
-    top: 0;
-    width: 100%; /* Full width */
-    height: 100%; /* Full height */
-    background-color: rgba(0,0,0,0.5); /* Black w/ opacity */
-    overflow-x: hidden; /* Disable horizontal scroll */
-    transition: 0.5s; /* 0.5 second transition effect to fade in and out */
-    padding-top: 60px; /* Center vertically */
-  }
-
-  /* The overlay content */
-  .overlay-content {
-    position: relative;
-    background-color: #fefefe;
-    margin: auto;
-    padding: 20px;
-    border-radius: 10px;
-    width: 80%; /* 80% width */
-    max-width: 400px; /* Max width of 400px */
-    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
-    animation: slideIn 0.5s ease;
-  }
-
-  /* Animation for overlay content */
-  @keyframes slideIn {
-    from {top: -100px; opacity: 0}
-    to {top: 0; opacity: 1}
-  }
-
-  .close-btn {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    color: #aaa;
-    font-size: 28px;
-    font-weight: bold;
-    cursor: pointer;
-  }
-
-  .close-btn:hover,
-  .close-btn:focus {
-    color: black;
-    text-decoration: none;
-    cursor: pointer;
-  }
-
-  .filter-options {
-    margin-top: 20px;
-    display: flex; /* Display options in a row */
-    flex-wrap: wrap; /* Wrap options to next line if needed */
-    justify-content: center; /* Center items horizontally */
-  }
-
-  .filter-option {
-    padding: 10px;
-    margin: 5px;
-    background-color: #f0f0f0;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-
-  .filter-option:hover {
-    background-color: #e0e0e0;
-  }
-</style>
-</head>
-<body>
-
-<button class="filter-btn" id="filterBtn">Filter</button>
-
-<div id="overlay" class="overlay">
-  <div class="overlay-content">
-    <span class="close-btn" id="closeBtn">&times;</span>
-    <h2>Filter Recipes</h2>
-    Cuisine
-    <div class="filter-options"> 
-      <div class="filter-option">Indian</div>
-      <div class="filter-option">Chinese</div>
-      <div class="filter-option">Italian</div>
-      <div class="filter-option">Greek</div>
-      <div class="filter-option">American</div>
-      <div class="filter-option">Mexican</div>
-    </div>
-    Dietary Preferences
-    <div class="filter-options"> 
-      <div class="filter-option">Non-Vegetarian</div>
-      <div class="filter-option">Vegan</div>
-      <div class="filter-option">Gluten-free</div>
-      <div class="filter-option">Dairy-free</div>
-      <div class="filter-option">Vegetarian</div>
-    </div>
-    Intolerances
-    <div class="filter-options"> 
-      <div class="filter-option">Soy</div>
-      <div class="filter-option">Peanut</div>
-      <div class="filter-option">Sesame</div>
-      <div class="filter-option">Seafood</div>
-      <div class="filter-option">Sulfite</div>
-    </div>
-  </div>
-</div>
-
-<script>
-  // Get the filter button and overlay
-  var filterBtn = document.getElementById("filterBtn");
-  var overlay = document.getElementById("overlay");
-
-  // Get the close button
-  var closeBtn = document.getElementById("closeBtn");
-
-  // When the user clicks the filter button, show the overlay
-  filterBtn.onclick = function() {
-    overlay.style.display = "block";
-  }
-
-  // When the user clicks on the close button, hide the overlay
-  closeBtn.onclick = function() {
-    overlay.style.display = "none";
-  }
-
-  // When the user clicks anywhere outside of the overlay, hide it
-  window.onclick = function(event) {
-    if (event.target == overlay) {
-      overlay.style.display = "none";
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Navbar with User's Name</title>
+  <style>
+    body,
+    html {
+      margin: 0;
+      padding: 0;
     }
-  }
-</script>
 
+    /* Style the navbar */
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: #333;
+      color: #fff;
+      padding: 10px 20px;
+    }
+
+    /* Style the links on the left side of the navbar */
+    .navbar-left a {
+      color: #fff;
+      text-decoration: none;
+      margin-right: 20px;
+    }
+
+    /* Style the user's name on the right side of the navbar */
+    .navbar-right {
+      font-size: 16px;
+    }
+  </style>
+</head>
+
+<body>
+  <nav class="navbar">
+    <div class="navbar-left">
+      <a href="#home">Home</a>
+      <a href="#about">About</a>
+      <a href="#services">Services</a>
+      <a href="#contact">Contact</a>
+    </div>
+    <div class="navbar-right">
+      <span>Welcome, John Doe</span>
+    </div>
+  </nav>
 </body>
+
 </html>
