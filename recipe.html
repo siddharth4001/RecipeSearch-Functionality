@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Recipe Details</title>
+<style>
+    body{
+        text-align: center;
+    }
+</style>
+</head>
+<body>
+
+<h1>Recipe Details</h1>
+
+<div id="recipe-details">
+  <!-- Recipe details will be displayed here -->
+</div>
+
+<script>
+    var log=localStorage.getItem("isLoggedIn");
+    if(log==0){
+        window.location.href="login.html";
+    }
+  const urlParams = new URLSearchParams(window.location.search);
+  const recipeId = urlParams.get('id');
+
+  async function fetchAndDisplayRecipeDetails() {
+    try {
+      const resp = await fetch(`https://api.spoonacular.com/recipes/${recipeId}/information?apiKey=9bca20bd730c497eba8ec4f3428d3ac7`);
+      const recipeData = await resp.json();
+      const recipeDetailsContainer = document.getElementById('recipe-details');
+      recipeDetailsContainer.innerHTML = `
+        <h2>${recipeData.title}</h2>
+        <p>Preparation Time: ${recipeData.readyInMinutes} minutes</p>
+        <img src="${recipeData.image}" alt="Recipe Image">
+        <p>${recipeData.summary}</p>
+      `;
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+// Call the function to fetch and display recipe details when the page loads
+window.onload = fetchAndDisplayRecipeDetails;
+</script>
+
+</body>
+</html>

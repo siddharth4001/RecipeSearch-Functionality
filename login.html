@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zomato-Login</title>
+    <link rel="stylesheet" href="login-style.css">
+</head>
+<body>
+    <div class="login-page">
+        <div class="form">
+            <input type="text" placeholder="username" id="name"/>
+            <input type="password" placeholder="password" id="pass" />
+            <button onclick="login()">Login</button>
+            <p class="message">Not registered? <a href="index.html">Create an account</a></p>
+        </div>
+    </div>
+
+
+    <script>
+        function login(){
+        var name=document.getElementById("name").value;
+        var pass=document.getElementById("pass").value;
+    
+        var username=localStorage.getItem("username");
+        var password=localStorage.getItem("Password");
+    
+        if(username===name && password===pass){
+            localStorage.setItem("isLoggedIn", 1);
+            window.location.href="homepage.html";
+        }
+        else{
+            alert("Invalid Credentials");
+        }
+    }
+    </script>
+</body>
+</html>

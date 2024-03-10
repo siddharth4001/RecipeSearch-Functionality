@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zomato</title>
+    <link rel="stylesheet" href="index.css">
+
+</head>
+
+<body>
+    <div class="login-page">
+        <div class="form">
+                <input type="text" placeholder="username" id="name"/>
+                <input type="password" placeholder="password" id="pass" />
+                <input type="password" placeholder="re-enter password" id="re-pass" />
+                <button onclick="signup()">SignUp</button>
+                <p class="message">Already have an account! <a href="login.html">Login</a></p>
+        </div>
+    </div>
+
+
+    <script>
+        function signup() {
+            localStorage.setItem("isLoggedIn",0);
+            var name = document.getElementById("name").value;
+            var pass = document.getElementById("pass").value;
+            var rePass=document.getElementById("re-pass").value;
+            
+            if(pass!==rePass){
+                alert("Passwords do not match");
+                window.location.href="index.html";
+            }else{
+                localStorage.setItem("username", name);
+                localStorage.setItem("Password", pass);
+
+                alert("Sign-Up successful");
+                window.location.href = "login.html";
+            }
+        }
+
+    </script>
+
+
+</body>
+
+
+</html>

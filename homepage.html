@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HomePage</title>
+    <link rel="stylesheet" href="homepage.css">
+</head>
+
+<body>
+
+    <div class="welcome" id="welcome"></div>
+    <div class="SearchBar">
+        <input type="text" name="" id="search" placeholder="ex.Garlic Naan, Biriyani">
+        <button type="button" onclick="handleSubmit()">Search</button>
+        <button onclick="logout()">Logout</button>
+
+        <button class="filter-btn" id="filterBtn">Filter</button>
+
+        <div id="overlay" class="overlay">
+            <div class="overlay-content">
+                <span class="close-btn" id="closeBtn">&times;</span>
+                <h2>Filter Recipes</h2>
+                <h3>Cuisine</h3>
+                <div class="filter-options">
+                    <input type="checkbox" class="cuisine-option" value="indian"> Indian<br>
+                    <input type="checkbox" class="cuisine-option" value="chinese"> Chinese<br>
+                    <input type="checkbox" class="cuisine-option" value="italian"> Italian<br>
+                    <input type="checkbox" class="cuisine-option" value="american"> American<br>
+                    <input type="checkbox" class="cuisine-option" value="mexican"> Mexican<br>
+                </div>
+                <h3>Diet</h3>
+                <div class="filter-options">
+                    <input type="checkbox" class="dietary-option" value="non-vegetarian"> Ketogenic<br>
+                    <input type="checkbox" class="dietary-option" value="vegan"> Vegan<br>
+                    <input type="checkbox" class="dietary-option" value="vegetarian"> Vegetarian<br>
+                    <input type="checkbox" class="dietary-option" value="gluten-free"> Gluten-free<br>
+                </div>
+                <h3>Intolerances</h3>
+                <div class="filter-options">
+                    <input type="checkbox" class="intolerance-option" value="soy"> Soy<br>
+                    <input type="checkbox" class="intolerance-option" value="peanut"> Peanut<br>
+                    <input type="checkbox" class="intolerance-option" value="sesame"> Sesame<br>
+                    <input type="checkbox" class="intolerance-option" value="seafood"> Seafood<br>
+                    <input type="checkbox" class="intolerance-option" value="sulfite"> Sulfite<br>
+                </div>
+                <button id="applyFilterBtn" onclick="handleSubmit()">Apply Filters</button>
+            </div>
+        </div>
+
+    </div>
+    <div id="data-container"></div>
+
+    <div class="loading-indicator" id="loading-indicator">
+        <img src="giphy.gif" alt="Loading..." width="50">
+        <div id="recipe"></div>
+    </div>
+
+    <div id="pagination"></div>
+
+
+
+
+    <script>
+
+        document.getElementById("welcome").innerHTML = 
+        `welcome ${localStorage.getItem("username")}`;
+
+        var log = localStorage.getItem("isLoggedIn");
+        if (log == 0) {
+            window.location.href = "login.html";
+        }
+        const RESULTS_PER_PAGE = 9;
+        let currentPage = 1;
+        let searchPerformed = false;
+
+        async function handleSubmit(e) {
+            var query = document.getElementById("search").value;
+            const cuisineOptions = Array.from(document.querySelectorAll('.cuisine-option:checked')).map(option => option.value).join(',');
+            const dietaryPreferences = Array.from(document.querySelectorAll('.dietary-option:checked')).map(option => option.value).join(',');
+            const intolerances = Array.from(document.querySelectorAll('.intolerance-option:checked')).map(option => option.value).join(',');
+            try {
+                document.getElementById("loading-indicator").style.display = "block";
+                let apiUrl = `https://api.spoonacular.com/recipes/complexSearch?apiKey=4b5597be793a4bb9bdb020314810e89c&query=${query}`;
+                if(cuisineOptions.length){
+                    apiUrl+=`&cuisine=${cuisineOptions}`;
+                }
+                if(dietaryPreferences.length){
+                    apiUrl+=`&diets=${dietaryPreferences}`;
+                }
+                if(intolerances.length){
+                    apiUrl+=`&intolerances=${intolerances}`;
+                }
+                apiUrl+=`&number=${RESULTS_PER_PAGE}&offset=${(currentPage - 1) * RESULTS_PER_PAGE}`;
+                console.log(apiUrl);
+
+                const resp = await fetch(apiUrl);
+                const data = await resp.json();
+                console.log(data);
+                const dataContainer = document.getElementById('data-container');
+                if (data.results.length === 0) {
+                    // window.location.href = "404.html";
+                } else {
+                    dataContainer.innerHTML = data.results.map(item => `
+                    <div class="card">
+                        <img src="${item.image}" alt="${item.title}">
+                        <b><p>${item.title}</p></b>
+                        <div class="frame">
+                            <button class="custom-btn btn-4" onclick="viewRecipe('${item.id}')"><span>View Recipe</span></button>
+                        </div>
+                    </div>
+                    `).join('');
+                    const paginationContainer = document.getElementById('pagination');
+                    paginationContainer.innerHTML = `
+                    <div class="frame">
+                        <button class="custom-btn btn-4" onclick="prevPage()"><span>Previous</span></button>
+                        <button class="custom-btn btn-4" onclick="nextPage()"><span>Next</span></button>
+                    </div>
+                `;
+                    searchPerformed = true;
+                }
+            } catch (err) {
+                console.error(err);
+            } finally {
+                // Hide loading indicator
+                document.getElementById("loading-indicator").style.display = "none";
+            }
+        }
+
+        async function viewRecipe(recipeId) {
+            try {
+                document.getElementById("loading-indicator").style.display = "block";
+                const resp = await fetch(`https://api.spoonacular.com/recipes/${recipeId}/information?apiKey=4b5597be793a4bb9bdb020314810e89c`);
+                const recipeData = await resp.json();
+                window.location.href = `recipe.html?id=${recipeId}`;
+            } catch (err) {
+                console.error(err);
+            } finally {
+                // Hide loading indicator
+                document.getElementById("loading-indicator").style.display = "none";
+            }
+        }
+
+        function nextPage() {
+            currentPage++;
+            handleSubmit(new Event('submit'));
+        }
+
+        function prevPage() {
+            if (currentPage > 1) {
+                currentPage--;
+                handleSubmit(new Event('submit'));
+            }
+        }
+
+        function logout() {
+            localStorage.setItem("isLoggedIn", 0);
+            window.location.href = "index.html";
+        }
+
+        // async function jokes() {
+        //     try {
+        //         const resp = await fetch(`https://api.spoonacular.com/food/jokes/random?apiKey=4b5597be793a4bb9bdb020314810e89c`);
+        //         const joke = await resp.json();
+        //         console.log(joke);
+        //         document.getElementById("recipe").innerHTML = `
+        //         <p>${joke.text}</p>
+        //     `;
+        //     } catch (err) {
+        //         console.error(err);
+        //     }
+        // }
+
+
+        // document.addEventListener("DOMContentLoaded", function () {
+        //     getRandomRecipes(); // Display random recipes initially
+        // });
+
+        var filterBtn = document.getElementById("filterBtn");
+        var overlay = document.getElementById("overlay");
+
+        // Get the close button
+        var closeBtn = document.getElementById("closeBtn");
+
+        // When the user clicks the filter button, show the overlay
+        filterBtn.onclick = function () {
+            overlay.style.display = "block";
+        }
+
+        // When the user clicks on the close button, hide the overlay
+        closeBtn.onclick = function () {
+            overlay.style.display = "none";
+        }
+
+        // When the user clicks anywhere outside of the overlay, hide it
+        window.onclick = function (event) {
+            if (event.target == overlay) {
+                overlay.style.display = "none";
+            }
+        }
+
+    </script>
+
+</body>
+</html> 

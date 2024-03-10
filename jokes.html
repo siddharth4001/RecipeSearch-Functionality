@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="recipe"></div>
+
+    <script>
+        async function jokes() {
+            try {
+                const resp = await fetch(`https://api.spoonacular.com/food/jokes/random?apiKey=4b5597be793a4bb9bdb020314810e89c`);
+                const joke = await resp.json();
+                console.log(joke);
+                document.getElementById("recipe").innerHTML = `
+                <p>${joke.text}</p>
+            `;
+            } catch (err) {
+                console.error(err);
+            } 
+        }
+    </script>
+</body>
+
+</html>
