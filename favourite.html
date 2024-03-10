@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Favorites</title>
+    <link rel="stylesheet" href="favorites.css">
+</head>
+
+<body>
+    <div class="navbar">
+        <div class="navbar-left">
+            <a href="homepage.html">Zomato</a>
+            <a href="homepage.html">Home</a>
+            <a href="favourite.html">Favourites</a>
+            <a href="login.html">Login</a>
+            <a href="index.html">Signup</a>
+        </div>
+        <div class="navbar-right">
+            <div class="welcome" id="welcome"></div>
+        </div>
+    </div>
+
+    <div class="favorites-container" id="favorites-container"></div>
+
+    <script>
+        document.getElementById("welcome").innerHTML =
+            `${localStorage.getItem("username")} <button class="logout-button" onclick="logout()"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
+  <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
+  <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"/>
+</svg></button>`;
+
+        var log = localStorage.getItem("isLoggedIn");
+        if (log == 0) {
+            window.location.href = "login.html";
+        }
+
+        function logout() {
+            localStorage.setItem("isLoggedIn", 0);
+            window.location.href = "index.html";
+        }
+
+        function displayFavorites() {
+            try {
+                const favoritesContainer = document.getElementById('favorites-container');
+                let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+                if (favorites.length === 0) {
+                    favoritesContainer.innerHTML = '<p>No favorite recipes added yet.</p>';
+                } else {
+                    favoritesContainer.innerHTML = favorites.map(recipeId => `
+                    <div class="favorite-card">
+                        <img src="https://spoonacular.com/recipeImages/${recipeId}-312x150.jpg" alt="Recipe Image">
+                        <b><p>Recipe Title</p></b>
+                        <div class="frame">
+                            <button class="custom-btn btn-4" onclick="viewRecipe('${recipeId}')"><span>View Recipe</span></button>
+                        </div>
+                    </div>
+                    `).join('');
+                }
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        function viewRecipe(recipeId) {
+            window.location.href = `recipe.html?id=${recipeId}`;
+        }
+
+        displayFavorites();
+    </script>
+</body>
+
+</html>
